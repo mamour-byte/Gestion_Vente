@@ -62,7 +62,23 @@ def enregistrer_vente(produit_id, quantite, utilisateur_id, root):
 def afficher_interface_vente(utilisateur_id):
     vente_fenetre = ctk.CTk()
     vente_fenetre.title("Gestion des Ventes")
-    vente_fenetre.geometry("400x250")
+    
+    # Définir la taille de la fenêtre
+    window_width = 500  
+    window_height = 250
+    vente_fenetre.geometry(f"{window_width}x{window_height}")
+
+    # Obtenir la taille de l'écran
+    screen_width = vente_fenetre.winfo_screenwidth()
+    screen_height = vente_fenetre.winfo_screenheight()
+
+    # Calculer la position pour centrer la fenêtre
+    position_top = int(screen_height / 2 - window_height / 2)
+    position_left = int(screen_width / 2 - window_width / 2)
+
+    # Appliquer la position
+    vente_fenetre.geometry(f"{window_width}x{window_height}+{position_left}+{position_top}")
+    
 
     produits = get_produits()
 

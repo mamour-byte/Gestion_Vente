@@ -1,10 +1,11 @@
 from db import verifier_utilisateur
 from accueil import afficher_accueil
+import customtkinter as ctk
 from customtkinter import *
 from tkinter import messagebox
 
 # Configuration principale
-set_appearance_mode("light")  # "dark" ou "light"
+set_appearance_mode("light")  
 set_default_color_theme("green")
 
 # Fonction d'authentification
@@ -20,37 +21,44 @@ def verifier_authentification():
         afficher_accueil(utilisateur[1], utilisateur[0])   
     else:
         messagebox.showerror("Erreur", "Email ou mot de passe incorrect.")
+        
+        
+app = ctk.CTk()
 
-# Création de la fenêtre principale
-app = CTk()
-app.geometry("500x400")
-app.title("Authentification")
+# Définir la taille de la fenêtre
+window_width = 400  # Agrandir la fenêtre
+window_height = 500
+app.geometry(f"{window_width}x{window_height}")
 
-# Cadre principal
-frame = CTkFrame(master=app)
-frame.pack(expand=True, padx=20, pady=20, fill="both")
+# Obtenir la taille de l'écran
+screen_width = app.winfo_screenwidth()
+screen_height = app.winfo_screenheight()
 
-# Titre
-title_label = CTkLabel(master=frame, text="Connexion", font=("Arial Bold", 22))
-title_label.pack(pady=(10, 20))
+# Calculer la position pour centrer la fenêtre
+position_top = int(screen_height / 2 - window_height / 2)
+position_left = int(screen_width / 2 - window_width / 2)
 
-# Cadre pour les champs de saisie
-input_frame = CTkFrame(master=frame)
-input_frame.pack(pady=20, padx=20, fill="both")
+# Appliquer la position
+app.geometry(f"{window_width}x{window_height}+{position_left}+{position_top}")
 
-# Champ Email
-CTkLabel(master=input_frame, text="Email :", anchor="w").grid(row=0, column=0, sticky="w", pady=5)
-email_entry = CTkEntry(master=input_frame, placeholder_text="Entrez votre email", width=250)
-email_entry.grid(row=1, column=0, pady=5)
+# Créer le cadre
+frame = ctk.CTkFrame(master=app)
+frame.pack(pady=30, padx=80, fill="both", expand=True)
 
-# Champ Mot de passe
-CTkLabel(master=input_frame, text="Mot de passe :", anchor="w").grid(row=2, column=0, sticky="w", pady=5)
-mdp_entry = CTkEntry(master=input_frame, placeholder_text="Entrez votre mot de passe", show="*", width=250)
-mdp_entry.grid(row=3, column=0, pady=5)
+# Agrandir la police du label
+label = ctk.CTkLabel(master=frame, text="Se connecter", font=("Arial", 24))  # Police plus grande
+label.pack(pady=20, padx=10)
 
-# Bouton Connexion
-login_button = CTkButton(master=frame, text="Se connecter", command=verifier_authentification, width=250)
-login_button.pack(pady=20)
+# Agrandir les champs de texte
+email_entry = ctk.CTkEntry(master=frame, placeholder_text="Identifiant", font=("Arial", 18), width=350, height=40)  # Police plus grande
+email_entry.pack(pady=20)
 
-# Lancer l'application
+mdp_entry = ctk.CTkEntry(master=frame, placeholder_text="Mot de passe", show="*", font=("Arial", 18) , width=350, height=40)  # Police plus grande
+mdp_entry.pack(pady=20)
+
+# Agrandir le bouton
+button = ctk.CTkButton(master=frame, text="Connexion", command=verifier_authentification, font=("Arial", 18), width=250, height=50)  # Plus grand bouton
+button.pack(pady=20, padx=10)
+
+# Afficher l'application
 app.mainloop()

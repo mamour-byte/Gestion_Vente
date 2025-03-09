@@ -5,6 +5,7 @@ gestion_vente/
 │── accueil.py           # Interface d'accueil  
 │── ventes.py            # Gestion des ventes et factures  
 │── utils.py             # Fonctions utilitaires (hashing, vérifications, etc.)  
-│── assets/              # Images, icônes, styles (si nécessaire)  
+│── assets/              # Images, icônes, styles (si nécessaire)
+│── historique.py  
 └── database/gestion_vente.db  # Fichier SQLite
 

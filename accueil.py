@@ -11,7 +11,25 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
     # Configuration principale
     accueil = CTk()
     accueil.title("Accueil")
-    accueil.geometry("700x400")
+    
+    # Définir la taille de la fenêtre
+    window_width = 1000  # Agrandir la fenêtre
+    window_height = 600
+    accueil.geometry(f"{window_width}x{window_height}")
+
+    # Obtenir la taille de l'écran
+    screen_width = accueil.winfo_screenwidth()
+    screen_height = accueil.winfo_screenheight()
+
+    # Calculer la position pour centrer la fenêtre
+    position_top = int(screen_height / 2 - window_height / 2)
+    position_left = int(screen_width / 2 - window_width / 2)
+
+    # Appliquer la position
+    accueil.geometry(f"{window_width}x{window_height}+{position_left}+{position_top}")
+
+    
+    
 
     # Cadre principal
     main_frame = CTkFrame(master=accueil)
