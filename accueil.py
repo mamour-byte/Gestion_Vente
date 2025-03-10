@@ -13,7 +13,7 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
     accueil.title("Accueil")
     
     # Définir la taille de la fenêtre
-    window_width = 1000  # Agrandir la fenêtre
+    window_width = 1000
     window_height = 600
     accueil.geometry(f"{window_width}x{window_height}")
 
@@ -28,9 +28,6 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
     # Appliquer la position
     accueil.geometry(f"{window_width}x{window_height}+{position_left}+{position_top}")
 
-    
-    
-
     # Cadre principal
     main_frame = CTkFrame(master=accueil)
     main_frame.pack(expand=True, fill="both", padx=10, pady=10)
@@ -41,17 +38,37 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
 
     CTkLabel(master=left_frame, text=f"Bienvenue, {nom_utilisateur}!", font=("Arial Bold", 14)).pack(pady=20)
 
+    btn_Unk = CTkButton(master=left_frame, text="Admin", width=120, height=40)
+    btn_Unk.pack(pady=10)
+    
     btn_ventes = CTkButton(master=left_frame, text="Gérer les ventes", command=lambda: afficher_interface_vente(utilisateur_id), width=120, height=40)
     btn_ventes.pack(pady=10)
 
     btn_quitter = CTkButton(master=left_frame, text="Quitter", command=accueil.destroy, fg_color="red", hover_color="darkred", width=120, height=40)
     btn_quitter.pack(pady=10)
 
-    # Section droite : Liste des ventes
+    # Section droite : Liste des ventes et informations supplémentaires
     right_frame = CTkFrame(master=main_frame)
     right_frame.pack(side="right", expand=True, fill="both", padx=10, pady=10)
 
     CTkLabel(master=right_frame, text="Ventes effectuées", font=("Arial Bold", 16)).pack(pady=10)
+
+    # Ajouter une section de résumé des ventes
+    resume_frame = CTkFrame(master=right_frame)
+    resume_frame.pack(fill="x", padx=10, pady=10)
+
+    def afficher_resume_ventes():
+        ventes_table = get_historique_ventes()
+        total_ventes = len(ventes_table)
+        total_revenus = sum([vente[2] for vente in ventes_table])
+        produit_plus_vendu = max(ventes_table, key=lambda x: x[2])[3]
+
+        # Afficher les informations
+        CTkLabel(master=resume_frame, text=f"Nombre total de ventes : {total_ventes}", font=("Arial", 12)).pack(anchor="w")
+        CTkLabel(master=resume_frame, text=f"Total des revenus générés : {total_revenus} EUR", font=("Arial", 12)).pack(anchor="w")
+        CTkLabel(master=resume_frame, text=f"Produit le plus vendu : {produit_plus_vendu}", font=("Arial", 12)).pack(anchor="w")
+
+    afficher_resume_ventes()
 
     # Tableau des ventes (Treeview)
     columns = ("ID", "Date Vente", "Vendeur", "Produit")
@@ -59,10 +76,16 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
 
     # Configuration des colonnes
     for col in columns:
-        tree.heading(col, text=col)
+        tree.heading(col, text=col, anchor="center")
         tree.column(col, width=150, anchor="center")
 
-    tree.pack(pady=5, padx=5, fill="both", expand=True)  # Déplacer tree.pack() ici
+    # Ajouter les bordures et styles
+    style = ttk.Style()
+    style.configure("Treeview.Heading", font=("Arial", 12, "bold"), padding=5, borderwidth=2, relief="solid")
+    style.configure("Treeview", font=("Arial", 10), rowheight=25, borderwidth=2, relief="solid")
+
+    tree.pack(pady=5, padx=5, fill="both", expand=True)
+
 
     # Fonction pour charger les ventes
     def charger_ventes():
@@ -71,12 +94,12 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
         for row in tree.get_children():
             tree.delete(row)
 
-        ventes_table = get_historique_ventes()  
+        ventes_table = get_historique_ventes()
 
         for vente in ventes_table:
             # Formater la date si nécessaire
             date_formatee = datetime.strptime(vente[1], "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y")
-            tree.insert("", "end", values=(vente[0], date_formatee, vente[3], vente[4]))  # Ajuste l'ordre
+            tree.insert("", "end", values=(vente[0], date_formatee, vente[3], vente[4]))
 
     # Charger les ventes une première fois
     charger_ventes()
