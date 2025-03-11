@@ -1,3 +1,7 @@
+***************GESTION DE VENTES*************
+ 
+
+
 gestion_vente/
 │── main.py              # Point d'entrée de l'application  
 │── db.py                # Gestion de la base de données  

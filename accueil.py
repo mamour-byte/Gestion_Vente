@@ -37,12 +37,15 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
     left_frame.pack(side="left", fill="y", padx=10, pady=10)
 
     CTkLabel(master=left_frame, text=f"Bienvenue, {nom_utilisateur}!", font=("Arial Bold", 14)).pack(pady=20)
-
-    btn_Unk = CTkButton(master=left_frame, text="Admin", width=120, height=40)
-    btn_Unk.pack(pady=10)
     
     btn_ventes = CTkButton(master=left_frame, text="Gérer les ventes", command=lambda: afficher_interface_vente(utilisateur_id), width=120, height=40)
     btn_ventes.pack(pady=10)
+    
+    btn_Unk = CTkButton(master=left_frame, text="Users", width=120, height=40)
+    btn_Unk.pack(pady=10)
+    
+    btn_Unk = CTkButton(master=left_frame, text="Produits", width=120, height=40)
+    btn_Unk.pack(pady=10)
 
     btn_quitter = CTkButton(master=left_frame, text="Quitter", command=accueil.destroy, fg_color="red", hover_color="darkred", width=120, height=40)
     btn_quitter.pack(pady=10)
@@ -61,14 +64,30 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
         ventes_table = get_historique_ventes()
         total_ventes = len(ventes_table)
         total_revenus = sum([vente[2] for vente in ventes_table])
-        produit_plus_vendu = max(ventes_table, key=lambda x: x[2])[3]
 
-        # Afficher les informations
+        # Compter les quantités vendues pour chaque produit
+        produits_count = {}
+        for vente in ventes_table:
+            produit = vente[3]
+            if produit in produits_count:
+                produits_count[produit] += 1
+            else:
+                produits_count[produit] = 1
+
+        # Trouver le produit le plus vendu
+        produit_plus_vendu = max(produits_count, key=produits_count.get)
+
+        # Supprimer les anciens widgets
+        for widget in resume_frame.winfo_children():
+            widget.destroy()
+
+        # Afficher les nouvelles informations
         CTkLabel(master=resume_frame, text=f"Nombre total de ventes : {total_ventes}", font=("Arial", 12)).pack(anchor="w")
-        CTkLabel(master=resume_frame, text=f"Total des revenus générés : {total_revenus} EUR", font=("Arial", 12)).pack(anchor="w")
+        CTkLabel(master=resume_frame, text=f"Total des revenus générés : {total_revenus} F cfa", font=("Arial", 12)).pack(anchor="w")
         CTkLabel(master=resume_frame, text=f"Produit le plus vendu : {produit_plus_vendu}", font=("Arial", 12)).pack(anchor="w")
 
     afficher_resume_ventes()
+
 
     # Tableau des ventes (Treeview)
     columns = ("ID", "Date Vente", "Vendeur", "Produit")
@@ -86,8 +105,7 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
 
     tree.pack(pady=5, padx=5, fill="both", expand=True)
 
-
-    # Fonction pour charger les ventes
+    # Fonction pour charger les ventes et mettre à jour le résumé
     def charger_ventes():
         """Récupère et affiche l'historique des ventes"""
         # Supprimer les anciennes entrées
@@ -100,6 +118,8 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
             # Formater la date si nécessaire
             date_formatee = datetime.strptime(vente[1], "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y")
             tree.insert("", "end", values=(vente[0], date_formatee, vente[3], vente[4]))
+
+        afficher_resume_ventes()
 
     # Charger les ventes une première fois
     charger_ventes()

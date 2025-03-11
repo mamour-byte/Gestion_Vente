@@ -16,7 +16,7 @@ entry_name.pack(pady=12)
 entry_psw = ctk.CTkEntry(master=frame , placeholder_text="Mot de passe" , show="*")
 entry_psw.pack(pady=12)
 
-button = ctk.CTkButton(master=frame , text="Connexion" , command=)
+button = ctk.CTkButton(master=frame , text="Connexion" , command=connexion )
 button.pack(pady=12 , padx=10)
 
 login.mainloop()
