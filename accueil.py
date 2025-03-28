@@ -1,5 +1,6 @@
 from ventes import afficher_interface_vente
 from historique import get_historique_ventes
+from produits import afficher_interface_produits  # Importer la fonction pour afficher la page produit
 from customtkinter import *
 import tkinter as tk
 from tkinter import ttk
@@ -41,11 +42,12 @@ def afficher_accueil(nom_utilisateur, utilisateur_id):
     btn_ventes = CTkButton(master=left_frame, text="Gérer les ventes", command=lambda: afficher_interface_vente(utilisateur_id), width=120, height=40)
     btn_ventes.pack(pady=10)
     
-    btn_Unk = CTkButton(master=left_frame, text="Users", width=120, height=40)
-    btn_Unk.pack(pady=10)
+    btn_users = CTkButton(master=left_frame, text="Users", width=120, height=40)
+    btn_users.pack(pady=10)
     
-    btn_Unk = CTkButton(master=left_frame, text="Produits", width=120, height=40)
-    btn_Unk.pack(pady=10)
+    # Bouton Produits
+    btn_produits = CTkButton(master=left_frame, text="Produits", command=afficher_interface_produits, width=120, height=40)
+    btn_produits.pack(pady=10)
 
     btn_quitter = CTkButton(master=left_frame, text="Quitter", command=accueil.destroy, fg_color="red", hover_color="darkred", width=120, height=40)
     btn_quitter.pack(pady=10)
